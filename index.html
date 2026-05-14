@@ -192,48 +192,130 @@
 
         async function getSuggestions(destination, day) {
             // In a real application, you would make an API call here.
-            // For this example, we'll use dummy data.
+            // For this example, we'll use expanded dummy data.
             const dummyData = {
                 "Paris": {
                     "1": {
                         "places_of_interest": [
                             { "name": "Eiffel Tower", "description": "Iconic landmark of Paris." },
-                            { "name": "Louvre Museum", "description": "Home to the Mona Lisa." }
+                            { "name": "Louvre Museum", "description": "Home to the Mona Lisa and vast art collections." }
                         ],
                         "dining_options": [
                             { "name": "Le Jules Verne", "description": "Fine dining on the Eiffel Tower." },
-                            { "name": "L'Ambroisie", "description": "Three Michelin-starred restaurant." }
+                            { "name": "Angelina", "description": "Famous for its world-class hot chocolate." }
                         ]
                     },
                     "2": {
                         "places_of_interest": [
-                            { "name": "Notre-Dame Cathedral", "description": "Famous gothic cathedral." },
+                            { "name": "Notre-Dame Cathedral", "description": "Famous gothic cathedral (exterior views)." },
                             { "name": "Sainte-Chapelle", "description": "Stunning stained glass windows." }
                         ],
                         "dining_options": [
-                            { "name": "Le Procope", "description": "One of the oldest restaurants in Paris." },
-                            { "name": "Breizh Café", "description": "Famous for its crêpes." }
+                            { "name": "Le Procope", "description": "The oldest cafe in Paris." },
+                            { "name": "Breizh Café", "description": "Excellent savory and sweet crêpes." }
+                        ]
+                    },
+                    "3": {
+                        "places_of_interest": [
+                            { "name": "Montmartre & Sacré-Cœur", "description": "Artistic district with panoramic views." },
+                            { "name": "Musée d'Orsay", "description": "Impressionist masterpieces in a former train station." }
+                        ],
+                        "dining_options": [
+                            { "name": "Le Consulat", "description": "Classic cafe in the heart of Montmartre." },
+                            { "name": "Bouillon Chartier", "description": "Traditional French food in a historic setting." }
                         ]
                     }
                 },
                 "New York": {
                     "1": {
                         "places_of_interest": [
-                            { "name": "Statue of Liberty", "description": "A symbol of freedom." },
-                            { "name": "Empire State Building", "description": "Iconic skyscraper with city views." }
+                            { "name": "Statue of Liberty & Ellis Island", "description": "Symbols of American history." },
+                            { "name": "Battery Park", "description": "Beautiful waterfront park with harbor views." }
                         ],
                         "dining_options": [
-                            { "name": "Katz's Delicatessen", "description": "Classic New York deli." },
-                            { "name": "Grimaldi's Pizza", "description": "Famous pizza under the Brooklyn Bridge." }
+                            { "name": "Katz's Delicatessen", "description": "Legendary New York deli." },
+                            { "name": "Fraunces Tavern", "description": "Historic colonial-era restaurant." }
+                        ]
+                    },
+                    "2": {
+                        "places_of_interest": [
+                            { "name": "Empire State Building", "description": "Iconic Art Deco skyscraper." },
+                            { "name": "Times Square", "description": "The bright lights and energy of NYC." }
+                        ],
+                        "dining_options": [
+                            { "name": "Junior's Restaurant", "description": "Famous for the best cheesecake in NY." },
+                            { "name": "Joe's Pizza", "description": "Classic Greenwich Village slice." }
+                        ]
+                    },
+                    "3": {
+                        "places_of_interest": [
+                            { "name": "Central Park", "description": "Oasis in the middle of Manhattan." },
+                            { "name": "Metropolitan Museum of Art", "description": "One of the world's largest art museums." }
+                        ],
+                        "dining_options": [
+                            { "name": "Tavern on the Green", "description": "Iconic restaurant inside Central Park." },
+                            { "name": "The Halal Guys", "description": "Famous street food cart." }
+                        ]
+                    }
+                },
+                "Tokyo": {
+                    "1": {
+                        "places_of_interest": [
+                            { "name": "Senso-ji Temple", "description": "Tokyo's oldest temple in Asakusa." },
+                            { "name": "Tokyo Skytree", "description": "Tallest tower in Japan with observation decks." }
+                        ],
+                        "dining_options": [
+                            { "name": "Asakusa Imahan", "description": "Renowned for its sukiyaki and shabu-shabu." },
+                            { "name": "Kamatake Udon", "description": "Delicious handmade udon noodles." }
+                        ]
+                    },
+                    "2": {
+                        "places_of_interest": [
+                            { "name": "Meiji Jingu Shrine", "description": "Shinto shrine dedicated to Emperor Meiji." },
+                            { "name": "Harajuku (Takeshita Street)", "description": "Center of youth culture and fashion." }
+                        ],
+                        "dining_options": [
+                            { "name": "Afuri Ramen", "description": "Famous for its yuzu-scented ramen." },
+                            { "name": "Maisen Tonkatsu", "description": "Top-tier breaded pork cutlets." }
                         ]
                     }
                 }
             };
 
+            const genericSuggestions = [
+                {
+                    "places_of_interest": [
+                        { "name": "City Walking Tour", "description": "Explore the local streets and architecture." },
+                        { "name": "Local Market", "description": "Experience local life and fresh produce." }
+                    ],
+                    "dining_options": [
+                        { "name": "Highly Rated Local Bistro", "description": "Try the regional specialties." },
+                        { "name": "Street Food Hub", "description": "Quick and delicious local bites." }
+                    ]
+                },
+                {
+                    "places_of_interest": [
+                        { "name": "National Museum", "description": "Learn about the history and culture of the region." },
+                        { "name": "Botanical Garden", "description": "Enjoy a peaceful stroll among native plants." }
+                    ],
+                    "dining_options": [
+                        { "name": "Riverside Cafe", "description": "Relaxing meal with a view." },
+                        { "name": "Family-Owned Trattoria", "description": "Authentic flavors and warm hospitality." }
+                    ]
+                }
+            ];
+
             return new Promise(resolve => {
                 setTimeout(() => {
-                    resolve((dummyData[destination] && dummyData[destination][day]) || { "places_of_interest": [], "dining_options": [] });
-                }, 500);
+                    let result = (dummyData[destination] && dummyData[destination][day]);
+                    
+                    if (!result) {
+                        // Cycle through generic suggestions if specific ones aren't found
+                        result = genericSuggestions[(day - 1) % genericSuggestions.length];
+                    }
+                    
+                    resolve(result);
+                }, 400);
             });
         }
 

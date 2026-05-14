@@ -3,11 +3,21 @@
 <html>
 <head>
     <title>Travel Plan Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-coral: #FF7F50;
+            --secondary-teal: #20B2AA;
+            --sunny-yellow: #FFD700;
+            --soft-white: #FFFFFF;
+            --dark-text: #2D3436;
+            --light-bg: #f8f9fa;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--sunny-yellow) 0%, var(--primary-coral) 100%);
+            color: var(--dark-text);
             line-height: 1.6;
             display: flex;
             justify-content: center;
@@ -17,109 +27,186 @@
             padding: 20px;
             box-sizing: border-box;
         }
+
         .container {
-            background: #fff;
+            background: var(--soft-white);
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
+            transition: transform 0.3s ease;
         }
+
         h1 {
             text-align: center;
-            color: #0056b3;
+            color: var(--primary-coral);
             margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 2.2rem;
         }
+
         form {
             display: flex;
             flex-direction: column;
         }
+
         label {
             margin-bottom: 8px;
-            font-weight: bold;
+            font-weight: 400;
+            color: #636e72;
         }
+
         input[type="text"],
         input[type="number"] {
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            margin-bottom: 24px;
             font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
         }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-coral);
+        }
+
         input[type="submit"] {
-            background-color: #0056b3;
+            background-color: var(--primary-coral);
             color: white;
-            padding: 15px;
+            padding: 18px;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 18px;
-            transition: background-color 0.3s;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 127, 80, 0.3);
         }
+
         input[type="submit"]:hover {
-            background-color: #004494;
+            background-color: #ff6a33;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 127, 80, 0.4);
         }
+
         #plan-container {
             display: none;
+            animation: fadeIn 0.5s ease;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .plan-details {
+            background: var(--light-bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
         .plan-details p {
-            font-size: 18px;
-            margin: 10px 0;
+            font-size: 15px;
+            margin: 0;
+            color: #636e72;
         }
+
         .plan-details strong {
-            color: #0056b3;
+            display: block;
+            color: var(--primary-coral);
+            font-size: 18px;
         }
-        .itinerary {
-            margin-top: 30px;
-        }
+
         .itinerary h2 {
-            color: #0056b3;
-            border-bottom: 2px solid #0056b3;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            color: var(--secondary-teal);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-align: center;
         }
+
         .day {
-            background: #e7f3ff;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 15px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--secondary-teal);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
         }
+
+        .day:hover {
+            transform: scale(1.02);
+        }
+
         .day h3 {
-            color: #004494;
+            color: var(--secondary-teal);
             margin-top: 0;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
         }
+
+        .day h4 {
+            color: var(--primary-coral);
+            margin: 15px 0 8px;
+            font-size: 1.1rem;
+        }
+
+        .day ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .day li {
+            margin-bottom: 8px;
+        }
+
         .new-plan-btn {
             display: block;
-            width: 200px;
+            width: fit-content;
             margin: 40px auto 0;
-            padding: 15px;
+            padding: 15px 40px;
             text-align: center;
-            background-color: #0056b3;
+            background-color: var(--secondary-teal);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
             cursor: pointer;
         }
+
         .new-plan-btn:hover {
-            background-color: #004494;
+            background-color: #1a9e97;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="form-container">
-            <h1>Travel Plan Generator</h1>
+            <h1>🏝️ Travel Plan Generator ✈️</h1>
             <form id="travel-plan-form">
-                <label for="destination">Destination:</label>
-                <input type="text" id="destination" name="destination" placeholder="e.g., Paris, New York" required>
-                <label for="days">Number of days:</label>
-                <input type="number" id="days" name="days" min="1" placeholder="e.g., 2" required>
-                <label for="travelers">Number of travelers:</label>
+                <label for="destination">📍 Destination:</label>
+                <input type="text" id="destination" name="destination" placeholder="e.g., Paris, Tokyo" required>
+                
+                <label for="days">📅 Number of days:</label>
+                <input type="number" id="days" name="days" min="1" placeholder="e.g., 3" required>
+                
+                <label for="travelers">👥 Number of travelers:</label>
                 <input type="number" id="travelers" name="travelers" min="1" placeholder="e.g., 2" required>
-                <label for="budget">Budget (USD):</label>
-                <input type="number" id="budget" name="budget" min="1" placeholder="e.g., 1500" required>
-                <input type="submit" value="Generate My Travel Plan">
+                
+                <label for="budget">💰 Budget (USD):</label>
+                <input type="number" id="budget" name="budget" min="1" placeholder="e.g., 2000" required>
+                
+                <input type="submit" value="☀️ Generate My Vacation!">
             </form>
         </div>
 
@@ -142,7 +229,7 @@
                 const suggestions = await getSuggestions(destination, i);
                 let placesHtml = '';
                 if (suggestions.places_of_interest && suggestions.places_of_interest.length > 0) {
-                    placesHtml = '<h4>Places of Interest</h4><ul>';
+                    placesHtml = '<h4>🏛️ Places of Interest</h4><ul>';
                     suggestions.places_of_interest.forEach(place => {
                         placesHtml += `<li><strong>${place.name}:</strong> ${place.description}</li>`;
                     });
@@ -151,7 +238,7 @@
 
                 let diningHtml = '';
                 if (suggestions.dining_options && suggestions.dining_options.length > 0) {
-                    diningHtml = '<h4>Dining Options</h4><ul>';
+                    diningHtml = '<h4>🍽️ Dining Options</h4><ul>';
                     suggestions.dining_options.forEach(option => {
                         diningHtml += `<li><strong>${option.name}:</strong> ${option.description}</li>`;
                     });
@@ -168,20 +255,20 @@
             }
 
             const planHtml = `
-                <h1>Your Custom Travel Plan</h1>
+                <h1>🏝️ Your Custom Vacation Plan ☀️</h1>
                 <div class="plan-details">
-                    <p><strong>Destination:</strong> ${destination}</p>
-                    <p><strong>Duration:</strong> ${days} Days</p>
-                    <p><strong>Travelers:</strong> ${travelers}</p>
-                    <p><strong>Total Budget:</strong> $${budget}</p>
+                    <p><strong>📍 Destination</strong> ${destination}</p>
+                    <p><strong>📅 Duration</strong> ${days} Days</p>
+                    <p><strong>👥 Travelers</strong> ${travelers}</p>
+                    <p><strong>💰 Total Budget</strong> $${budget}</p>
                 </div>
 
                 <div class="itinerary">
-                    <h2>Daily Itinerary</h2>
+                    <h2>🗺️ Daily Itinerary</h2>
                     ${itineraryHtml}
                 </div>
 
-                <div class="new-plan-btn" onclick="startNewPlan()">Create a New Plan</div>
+                <div class="new-plan-btn" onclick="startNewPlan()">🔄 Plan Another Trip</div>
             `;
 
             document.getElementById('form-container').style.display = 'none';

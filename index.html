@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Travel Plan Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+            margin-bottom: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"] {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #004494;
+        }
+        #plan-container {
+            display: none;
+        }
+        .plan-details p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .plan-details strong {
+            color: #0056b3;
+        }
+        .itinerary {
+            margin-top: 30px;
+        }
+        .itinerary h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .day {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .day h3 {
+            color: #004494;
+            margin-top: 0;
+        }
+        .new-plan-btn {
+            display: block;
+            width: 200px;
+            margin: 40px auto 0;
+            padding: 15px;
+            text-align: center;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .new-plan-btn:hover {
+            background-color: #004494;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="form-container">
+            <h1>Travel Plan Generator</h1>
+            <form id="travel-plan-form">
+                <label for="destination">Destination:</label>
+                <input type="text" id="destination" name="destination" placeholder="e.g., Paris, France" required>
+                <label for="days">Number of days:</label>
+                <input type="number" id="days" name="days" min="1" placeholder="e.g., 7" required>
+                <label for="travelers">Number of travelers:</label>
+                <input type="number" id="travelers" name="travelers" min="1" placeholder="e.g., 2" required>
+                <label for="budget">Budget (USD):</label>
+                <input type="number" id="budget" name="budget" min="1" placeholder="e.g., 1500" required>
+                <input type="submit" value="Generate My Travel Plan">
+            </form>
+        </div>
+
+        <div id="plan-container">
+            <!-- The generated plan will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('travel-plan-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const destination = document.getElementById('destination').value;
+            const days = parseInt(document.getElementById('days').value);
+            const travelers = document.getElementById('travelers').value;
+            const budget = document.getElementById('budget').value;
+
+            let itineraryHtml = '';
+            for (let i = 1; i <= days; i++) {
+                itineraryHtml += `
+                    <div class="day">
+                        <h3>Day ${i}</h3>
+                        <p>Explore and enjoy your time in ${destination}!</p>
+                        <p>_Feel free to add your own activities here._</p>
+                    </div>
+                `;
+            }
+
+            const planHtml = `
+                <h1>Your Custom Travel Plan</h1>
+                <div class="plan-details">
+                    <p><strong>Destination:</strong> ${destination}</p>
+                    <p><strong>Duration:</strong> ${days} Days</p>
+                    <p><strong>Travelers:</strong> ${travelers}</p>
+                    <p><strong>Total Budget:</strong> $${budget}</p>
+                </div>
+
+                <div class="itinerary">
+                    <h2>Daily Itinerary</h2>
+                    ${itineraryHtml}
+                </div>
+
+                <div class="new-plan-btn" onclick="startNewPlan()">Create a New Plan</div>
+            `;
+
+            document.getElementById('form-container').style.display = 'none';
+            const planContainer = document.getElementById('plan-container');
+            planContainer.innerHTML = planHtml;
+            planContainer.style.display = 'block';
+        });
+
+        function startNewPlan() {
+            document.getElementById('plan-container').style.display = 'none';
+            document.getElementById('travel-plan-form').reset();
+            document.getElementById('form-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -112,9 +112,9 @@
             <h1>Travel Plan Generator</h1>
             <form id="travel-plan-form">
                 <label for="destination">Destination:</label>
-                <input type="text" id="destination" name="destination" placeholder="e.g., Paris, France" required>
+                <input type="text" id="destination" name="destination" placeholder="e.g., Paris, New York" required>
                 <label for="days">Number of days:</label>
-                <input type="number" id="days" name="days" min="1" placeholder="e.g., 7" required>
+                <input type="number" id="days" name="days" min="1" placeholder="e.g., 2" required>
                 <label for="travelers">Number of travelers:</label>
                 <input type="number" id="travelers" name="travelers" min="1" placeholder="e.g., 2" required>
                 <label for="budget">Budget (USD):</label>
@@ -129,7 +129,7 @@
     </div>
 
     <script>
-        document.getElementById('travel-plan-form').addEventListener('submit', function(event) {
+        document.getElementById('travel-plan-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const destination = document.getElementById('destination').value;
@@ -139,11 +139,30 @@
 
             let itineraryHtml = '';
             for (let i = 1; i <= days; i++) {
+                const suggestions = await getSuggestions(destination, i);
+                let placesHtml = '';
+                if (suggestions.places_of_interest && suggestions.places_of_interest.length > 0) {
+                    placesHtml = '<h4>Places of Interest</h4><ul>';
+                    suggestions.places_of_interest.forEach(place => {
+                        placesHtml += `<li><strong>${place.name}:</strong> ${place.description}</li>`;
+                    });
+                    placesHtml += '</ul>';
+                }
+
+                let diningHtml = '';
+                if (suggestions.dining_options && suggestions.dining_options.length > 0) {
+                    diningHtml = '<h4>Dining Options</h4><ul>';
+                    suggestions.dining_options.forEach(option => {
+                        diningHtml += `<li><strong>${option.name}:</strong> ${option.description}</li>`;
+                    });
+                    diningHtml += '</ul>';
+                }
+
                 itineraryHtml += `
                     <div class="day">
                         <h3>Day ${i}</h3>
-                        <p>Explore and enjoy your time in ${destination}!</p>
-                        <p>_Feel free to add your own activities here._</p>
+                        ${placesHtml || '<p>No suggestions for places of interest on this day.</p>'}
+                        ${diningHtml || '<p>No suggestions for dining options on this day.</p>'}
                     </div>
                 `;
             }
@@ -170,6 +189,53 @@
             planContainer.innerHTML = planHtml;
             planContainer.style.display = 'block';
         });
+
+        async function getSuggestions(destination, day) {
+            // In a real application, you would make an API call here.
+            // For this example, we'll use dummy data.
+            const dummyData = {
+                "Paris": {
+                    "1": {
+                        "places_of_interest": [
+                            { "name": "Eiffel Tower", "description": "Iconic landmark of Paris." },
+                            { "name": "Louvre Museum", "description": "Home to the Mona Lisa." }
+                        ],
+                        "dining_options": [
+                            { "name": "Le Jules Verne", "description": "Fine dining on the Eiffel Tower." },
+                            { "name": "L'Ambroisie", "description": "Three Michelin-starred restaurant." }
+                        ]
+                    },
+                    "2": {
+                        "places_of_interest": [
+                            { "name": "Notre-Dame Cathedral", "description": "Famous gothic cathedral." },
+                            { "name": "Sainte-Chapelle", "description": "Stunning stained glass windows." }
+                        ],
+                        "dining_options": [
+                            { "name": "Le Procope", "description": "One of the oldest restaurants in Paris." },
+                            { "name": "Breizh Café", "description": "Famous for its crêpes." }
+                        ]
+                    }
+                },
+                "New York": {
+                    "1": {
+                        "places_of_interest": [
+                            { "name": "Statue of Liberty", "description": "A symbol of freedom." },
+                            { "name": "Empire State Building", "description": "Iconic skyscraper with city views." }
+                        ],
+                        "dining_options": [
+                            { "name": "Katz's Delicatessen", "description": "Classic New York deli." },
+                            { "name": "Grimaldi's Pizza", "description": "Famous pizza under the Brooklyn Bridge." }
+                        ]
+                    }
+                }
+            };
+
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve((dummyData[destination] && dummyData[destination][day]) || { "places_of_interest": [], "dining_options": [] });
+                }, 500);
+            });
+        }
 
         function startNewPlan() {
             document.getElementById('plan-container').style.display = 'none';
